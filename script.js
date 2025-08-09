@@ -9,3 +9,11 @@ taskForm.addEventListener('submit', (event) => {
     console.log('Clickahh')
     sample.innerHTML = "asdas";
 });
+
+function deleteRow(childEl) {
+    // get the closest tr element of childEl
+    let getTr = childEl.closest('tr');
+
+    // Remove the row element
+    getTr.remove();
+}
