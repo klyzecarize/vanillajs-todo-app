@@ -4,13 +4,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>To do app</header>
-    <main>asdasd</main>
+    <main>
+        <!-- Add Task -->
+        <div class="container-fluid">
+            <form class="row g-3">
+                <div class="col-auto">
+                    <label for="inputTask" class="visually-hidden">Add Task</label>
+                    <input type="text" class="form-control" id="inputTask" placeholder="Task">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary mb-3">Add Task</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="container-fluid">
+            <table class="table table-striped table-bordered table-responsive text-center">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" name="selectAllTask" id="selectAllTask">
+                        </th>
+                        <th>#</th>
+                        <th class="col-6">Task</th>
+                        <th>Buttons</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="1" id="1">
+                        </td>
+                        <td>1</td>
+                        <td>asdasd</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="2" id="2">
+                        </td>
+                        <td>2</td>
+                        <td>asdasda</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="3" id="3">
+                        </td>
+                        <td>3</td>
+                        <td>asdasdas</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
     <footer>credits</footer>
 
+    <!-- Main Script -->
     <script src="/script.js"></script>
+
+    <!-- Bootstrapt Script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </body>
 </html>
