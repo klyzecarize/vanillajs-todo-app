@@ -1,7 +1,10 @@
 const taskForm = document.getElementById("taskForm");
 const tbodyTag = document.getElementById("tbodyTag");
+const multiDeleteBtn = document.getElementById("multiple-delete-btn");
+const selectAllBox = document.querySelector('#selectAllTask');
 const emptyEl = document.getElementById("empty");
 let taskId = 0;
+let selectedRows = [];
 
 taskForm.addEventListener('submit', (event) => {
     const form = event.target;
@@ -16,14 +19,7 @@ taskForm.addEventListener('submit', (event) => {
     } else {
         alert("Value empty!") ;
     }
-
-    
 });
-
-// placed for multiple deletion
-function deleteRow(childEl) {
-    removeRow(childEl);
-}
 
 function addTableRow (taskValue) {
     emptyEl != null && removeRow(emptyEl);
@@ -32,7 +28,7 @@ function addTableRow (taskValue) {
     const rowHtml = `
         <tr>
             <td>
-                <input type="checkbox" name="${taskId}" id="${taskId}">
+                <input type="checkbox" class="task-checkbox" name="${taskId}" id="${taskId}">
             </td>
             <td>${taskValue}</td>
             <td>
@@ -53,10 +49,29 @@ tbodyTag.addEventListener("click", e => {
         removeRow(e.target);
     }
 
-    console.log(e.target.id);
+    if (e.target.classList.contains('task-checkbox') && !e.target.checked){
+        selectAllBox.checked = false;
+    }
 });
 
+multiDeleteBtn.addEventListener("click", e => {
+    // this selects all elements that have checked input tags with class name task-checkbox
+    let getCheckboxes = tbodyTag.querySelectorAll('.task-checkbox:checked');
 
+    Object.values(getCheckboxes).forEach(checkbox => {
+        removeRow(checkbox);
+    });
+});
+
+// Check or Uncheck all the checkboxes
+selectAllBox.addEventListener('click', e => {
+    let isChecked = e.target.checked;
+    let getCheckboxes = tbodyTag.querySelectorAll('.task-checkbox');
+
+    Object.values(getCheckboxes).forEach(checkbox => {
+        checkbox.checked = isChecked;
+    });
+});
 
 function removeRow (childEl) {
     // get the closest tr element of childEl
@@ -64,5 +79,4 @@ function removeRow (childEl) {
 
     // Remove the row element
     getTr.remove();
-
 }
