@@ -1,7 +1,7 @@
 const taskForm = document.getElementById("taskForm");
 const tbodyTag = document.getElementById("tbodyTag");
 const emptyEl = document.getElementById("empty");
-let sampleInt = 0;
+let taskId = 0;
 
 taskForm.addEventListener('submit', (event) => {
     const form = event.target;
@@ -32,21 +32,31 @@ function addTableRow (taskValue) {
     const rowHtml = `
         <tr>
             <td>
-                <input type="checkbox" name="${sampleInt}" id="${sampleInt}">
+                <input type="checkbox" name="${taskId}" id="${taskId}">
             </td>
             <td>${taskValue}</td>
             <td>
-                <button type="button" class="btn btn-danger" onclick="deleteRow(this)">Delete</button>
+                <button type="button" class="btn btn-danger delete-btn">Delete</button>
             </td>
         </tr>
     `;
 
     // {html tag}.inserAdjacentHTML(position, html) - inserts HTML code into a specified position
-    // tbodyTag.insertAdjacentHTML('beforeend', rowHtml);
-    tbodyTag.innerHTML += rowHtml;
+    tbodyTag.insertAdjacentHTML('beforeend', rowHtml);
 
-    sampleInt++;
+    taskId++;
 }
+
+tbodyTag.addEventListener("click", e => {
+    // checks the clicked target if it contains 'delete-btn' class on the button clicked
+    if (e.target.classList.contains('delete-btn')) {
+        removeRow(e.target);
+    }
+
+    console.log(e.target.id);
+});
+
+
 
 function removeRow (childEl) {
     // get the closest tr element of childEl
