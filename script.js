@@ -9,9 +9,15 @@ taskForm.addEventListener('submit', (event) => {
     // prevents page to refresh when you click submit
     event.preventDefault();
 
-    addTableRow(form.inputTask.value);
+    if (form.inputTask.value != "") {
+        addTableRow(form.inputTask.value)
 
-    form.inputTask.value = "";
+        form.inputTask.value = "";
+    } else {
+        alert("Value empty!") ;
+    }
+
+    
 });
 
 // placed for multiple deletion
@@ -28,7 +34,6 @@ function addTableRow (taskValue) {
             <td>
                 <input type="checkbox" name="${sampleInt}" id="${sampleInt}">
             </td>
-            <td>${sampleInt}</td>
             <td>${taskValue}</td>
             <td>
                 <button type="button" class="btn btn-danger" onclick="deleteRow(this)">Delete</button>
