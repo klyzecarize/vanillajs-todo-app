@@ -1,6 +1,7 @@
 const taskForm = document.getElementById("taskForm");
 const tbodyTag = document.getElementById("tbodyTag");
 const multiDeleteBtn = document.getElementById("multiple-delete-btn");
+const selectAllBox = document.querySelector('#selectAllTask');
 const emptyEl = document.getElementById("empty");
 let taskId = 0;
 let selectedRows = [];
@@ -47,6 +48,10 @@ tbodyTag.addEventListener("click", e => {
     if (e.target.classList.contains('delete-btn')) {
         removeRow(e.target);
     }
+
+    if (e.target.classList.contains('task-checkbox') && !e.target.checked){
+        selectAllBox.checked = false;
+    }
 });
 
 multiDeleteBtn.addEventListener("click", e => {
@@ -55,6 +60,16 @@ multiDeleteBtn.addEventListener("click", e => {
 
     Object.values(getCheckboxes).forEach(checkbox => {
         removeRow(checkbox);
+    });
+});
+
+// Check or Uncheck all the checkboxes
+selectAllBox.addEventListener('click', e => {
+    let isChecked = e.target.checked;
+    let getCheckboxes = tbodyTag.querySelectorAll('.task-checkbox');
+
+    Object.values(getCheckboxes).forEach(checkbox => {
+        checkbox.checked = isChecked;
     });
 });
 
