@@ -101,7 +101,7 @@ selectAllBox.addEventListener('click', e => {
 
 // remove the task on the array
 function removeTask (id) {
-    tasks = tasks.filter((task) => task.id !== id);
+    tasks = tasks.filter((task) => task.id != id);
 
     renderTableData();
 }
