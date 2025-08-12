@@ -4,7 +4,7 @@ const multiDeleteBtn = document.getElementById("multiple-delete-btn");
 const selectAllBox = document.querySelector('#selectAllTask');
 const emptyEl = document.getElementById("empty");
 let taskId = 0;
-let selectedRows = [];
+let tasks = [];
 
 taskForm.addEventListener('submit', (event) => {
     const form = event.target;
@@ -13,7 +13,16 @@ taskForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
     if (form.inputTask.value != "") {
-        addTableRow(form.inputTask.value)
+        let taskData = {
+            id: taskId,
+            task: form.inputTask.value
+        }
+
+        tasks.push(taskData);
+
+        taskId++;
+
+        renderTableData();
 
         form.inputTask.value = "";
     } else {
@@ -21,32 +30,49 @@ taskForm.addEventListener('submit', (event) => {
     }
 });
 
-function addTableRow (taskValue) {
-    emptyEl != null && removeRow(emptyEl);
-    
-    // template for row
-    const rowHtml = `
-        <tr>
-            <td>
-                <input type="checkbox" class="task-checkbox" name="${taskId}" id="${taskId}">
-            </td>
-            <td>${taskValue}</td>
-            <td>
-                <button type="button" class="btn btn-danger delete-btn">Delete</button>
-            </td>
-        </tr>
-    `;
+function renderTableData () {
+    // this will remove all the elements inside the tbodyTag
+    tbodyTag.innerHTML = "";
 
-    // {html tag}.inserAdjacentHTML(position, html) - inserts HTML code into a specified position
-    tbodyTag.insertAdjacentHTML('beforeend', rowHtml);
+    if (tasks.length === 0) {
+        const rowHtml = `
+            <tr>
+                <td id="empty" colspan="3">
+                    Empty
+                </td>
+            </tr>
+        `;
 
-    taskId++;
+        tbodyTag.innerHTML = rowHtml;
+
+        selectAllBox.checked = false;
+        return;
+    }
+
+    tasks.forEach(task => {
+        const rowHtml = `
+            <tr>
+                <td>
+                    <input type="checkbox" class="task-checkbox" name="${task.id}" id="${task.id}">
+                </td>
+                <td>${task.task}</td>
+                <td>
+                    <button type="button" class="btn btn-danger delete-btn">Delete</button>
+                </td>
+            </tr>
+        `;
+
+        // {html tag}.inserAdjacentHTML(position, html) - inserts HTML code into a specified position
+        tbodyTag.insertAdjacentHTML('beforeend', rowHtml);
+    });
 }
 
 tbodyTag.addEventListener("click", e => {
     // checks the clicked target if it contains 'delete-btn' class on the button clicked
     if (e.target.classList.contains('delete-btn')) {
-        removeRow(e.target);
+        const rowId = e.target.closest('tr').querySelector('.task-checkbox').id;
+        
+        removeTask(rowId);
     }
 
     if (e.target.classList.contains('task-checkbox') && !e.target.checked){
@@ -59,7 +85,7 @@ multiDeleteBtn.addEventListener("click", e => {
     let getCheckboxes = tbodyTag.querySelectorAll('.task-checkbox:checked');
 
     Object.values(getCheckboxes).forEach(checkbox => {
-        removeRow(checkbox);
+        removeTask(checkbox.id);
     });
 });
 
@@ -73,10 +99,11 @@ selectAllBox.addEventListener('click', e => {
     });
 });
 
-function removeRow (childEl) {
-    // get the closest tr element of childEl
-    let getTr = childEl.closest('tr');
+// remove the task on the array
+function removeTask (id) {
+    tasks = tasks.filter((task) => task.id !== id);
 
-    // Remove the row element
-    getTr.remove();
+    renderTableData();
 }
+
+renderTableData();
