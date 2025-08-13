@@ -2,7 +2,6 @@ const taskForm = document.getElementById("taskForm");
 const tbodyTag = document.getElementById("tbodyTag");
 const multiDeleteBtn = document.getElementById("multiple-delete-btn");
 const selectAllBox = document.querySelector('#selectAllTask');
-const emptyEl = document.getElementById("empty");
 let taskId = 0;
 let tasks = [];
 
