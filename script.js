@@ -2,9 +2,13 @@ const taskForm = document.getElementById("taskForm");
 const tbodyTag = document.getElementById("tbodyTag");
 const multiDeleteBtn = document.getElementById("multiple-delete-btn");
 const selectAllBox = document.querySelector('#selectAllTask');
-const emptyEl = document.getElementById("empty");
 let taskId = 0;
 let tasks = [];
+
+function init() {
+    loadTasksList();
+    renderTableData();
+}
 
 taskForm.addEventListener('submit', (event) => {
     const form = event.target;
@@ -21,6 +25,8 @@ taskForm.addEventListener('submit', (event) => {
         tasks.push(taskData);
 
         taskId++;
+
+        saveTasksList();
 
         renderTableData();
 
@@ -57,7 +63,7 @@ function renderTableData () {
                 </td>
                 <td>${task.task}</td>
                 <td>
-                    <button type="button" class="btn btn-danger delete-btn">Delete</button>
+                    <button type="button" class="btn btn-danger delete-btn" data-id="${task.id}">Delete</button>
                 </td>
             </tr>
         `;
@@ -67,43 +73,66 @@ function renderTableData () {
     });
 }
 
-tbodyTag.addEventListener("click", e => {
+tbodyTag.addEventListener("click", ({target}) => {
     // checks the clicked target if it contains 'delete-btn' class on the button clicked
-    if (e.target.classList.contains('delete-btn')) {
-        const rowId = e.target.closest('tr').querySelector('.task-checkbox').id;
+    if (target.classList.contains('delete-btn')) {
+        // Changed to metadata or custom data attributes
+        const data = target.dataset;
         
-        removeTask(rowId);
+        removeTask(data.id);
     }
 
-    if (e.target.classList.contains('task-checkbox') && !e.target.checked){
+    if (target.classList.contains('task-checkbox') && !target.checked){
         selectAllBox.checked = false;
     }
 });
 
-multiDeleteBtn.addEventListener("click", e => {
+multiDeleteBtn.addEventListener("click", () => {
     // this selects all elements that have checked input tags with class name task-checkbox
-    let getCheckboxes = tbodyTag.querySelectorAll('.task-checkbox:checked');
+    let getSelectedCheckboxes = getCheckboxes(true);
 
-    Object.values(getCheckboxes).forEach(checkbox => {
+    Object.values(getSelectedCheckboxes).forEach(checkbox => {
         removeTask(checkbox.id);
     });
 });
 
 // Check or Uncheck all the checkboxes
-selectAllBox.addEventListener('click', e => {
-    let isChecked = e.target.checked;
-    let getCheckboxes = tbodyTag.querySelectorAll('.task-checkbox');
+selectAllBox.addEventListener('click', ({target}) => {
+    let isChecked = target.checked;
+    let getAllCheckboxes = getCheckboxes();
 
-    Object.values(getCheckboxes).forEach(checkbox => {
+    Object.values(getAllCheckboxes).forEach(checkbox => {
         checkbox.checked = isChecked;
     });
 });
+
+// To get checkboxes
+function getCheckboxes (getChecked = false) {
+    return tbodyTag.querySelectorAll(
+        getChecked ? '.task-checkbox:checked' : '.task-checkbox'
+    );
+}
 
 // remove the task on the array
 function removeTask (id) {
     tasks = tasks.filter((task) => task.id != id);
 
+    saveTasksList();
+
     renderTableData();
 }
 
-renderTableData();
+function saveTasksList () {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    // this is the id for now
+    localStorage.setItem('lastId', JSON.stringify(taskId));
+}
+
+function loadTasksList () {
+    const getTasks = localStorage.getItem('tasks');
+    const getLastTaskId = localStorage.getItem('lastId');
+    tasks = getTasks ? JSON.parse(getTasks) : [];
+    taskId = getLastTaskId ? JSON.parse(getLastTaskId) : 0;
+}
+
+init();
