@@ -5,6 +5,11 @@ const selectAllBox = document.querySelector('#selectAllTask');
 let taskId = 0;
 let tasks = [];
 
+function init() {
+    loadTasksList();
+    renderTableData();
+}
+
 taskForm.addEventListener('submit', (event) => {
     const form = event.target;
 
@@ -20,6 +25,8 @@ taskForm.addEventListener('submit', (event) => {
         tasks.push(taskData);
 
         taskId++;
+
+        saveTasksList();
 
         renderTableData();
 
@@ -110,7 +117,22 @@ function getCheckboxes (getChecked = false) {
 function removeTask (id) {
     tasks = tasks.filter((task) => task.id != id);
 
+    saveTasksList();
+
     renderTableData();
 }
 
-renderTableData();
+function saveTasksList () {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    // this is the id for now
+    localStorage.setItem('lastId', JSON.stringify(taskId));
+}
+
+function loadTasksList () {
+    const getTasks = localStorage.getItem('tasks');
+    const getLastTaskId = localStorage.getItem('lastId');
+    tasks = getTasks ? JSON.parse(getTasks) : [];
+    taskId = getLastTaskId ? JSON.parse(getLastTaskId) : 0;
+}
+
+init();
