@@ -12,11 +12,17 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>To Do App</header>
+    <header>
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+                <span class="navbar-brand mb-0 h1">To Do App</span>
+            </div>
+        </nav>
+    </header>
     <main>
         <!-- Add Task -->
-        <div class="container-fluid">
-            <form class="row g-3" id="taskForm">
+        <div class="container-fluid my-3">
+            <form class="row g-3 " id="taskForm">
                 <div class="col-auto">
                     <label for="inputTask" class="visually-hidden">Add Task</label>
                     <input type="text" class="form-control" id="inputTask" placeholder="Task">
@@ -29,7 +35,7 @@
 
         <!-- Task Table -->
         <div class="container-fluid table-responsive">
-            <button type="button" id="multiple-delete-btn" class="btn btn-danger mb-3">Delete</button>
+            <button type="button" id="multiple-delete-btn" class="btn btn-danger w-100 mb-3">Delete</button>
 
             <table class="table table-striped table-bordered text-center">
                 <thead>
@@ -46,7 +52,12 @@
             </table>
         </div>
     </main>
-    <footer>credits</footer>
+    <footer>
+        <!-- Removed for now -->
+        <!-- <div class="container-fluid bg-white">
+            <p>credits</p>
+        </div> -->
+    </footer>
 
     <!-- Main Script -->
     <script src="script.js"></script>
