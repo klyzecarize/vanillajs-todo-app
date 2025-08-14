@@ -3,22 +3,20 @@ class TodoApp {
         this.taskForm = document.getElementById('taskForm');
         this.tbodyTag = document.getElementById('tbodyTag');
         this.multiDeleteBtn = document.getElementById('multiple-delete-btn');
+        this.taskFormModal = document.getElementById('taskFormModal');
+        this.modalFormInput = this.taskFormModal.querySelector('.modal-body input');
+        this.modalFormSubmit = this.taskFormModal.querySelector('.modal-footer button[type="submit"]');
         this.selectAllBox = document.querySelector('#selectAllTask');
         this.taskId = 0;
         this.tasks = [];
 
-        // form event listener
+        // event listeners
         this.taskForm.addEventListener('submit', this.handleSubmit.bind(this));
-
-        // tbody event listener
         this.tbodyTag.addEventListener('click', this.tbodyClick.bind(this));
-
-        // multi delete event listener
         this.multiDeleteBtn.addEventListener('click', this.multiDeleteClick.bind(this));
-        
-        // select all checkboxes event listener
         this.selectAllBox.addEventListener('click', this.selectAllClick.bind(this));
-    
+        this.taskFormModal.addEventListener('show.bs.modal', this.modalClick.bind(this))
+
         this._init()
     }
 
@@ -27,11 +25,35 @@ class TodoApp {
         this.renderTableRow();
     }
 
+    modalClick (event) {
+        const button = event.relatedTarget;
+
+        const getId = button.getAttribute('data-bs-id');
+        const getFormType = button.getAttribute('data-bs-formType');
+        console.log(getId);
+        console.log(getFormType);
+
+        this.modalFormSubmit.dataset.formType = getFormType;
+
+        if (getFormType === 'edit') {
+            const [taskValue] = this.findTask(getId);
+
+            this.modalFormInput.value = taskValue.task;
+            this.modalFormSubmit.dataset.id = getId;
+            return;
+        }
+
+        this.modalFormInput.value = "";
+
+    }
+
     handleSubmit (event) {
         const form = event.target;
-
+        const submitDataset = this.modalFormSubmit.dataset
+        
         // prevents page from refreshing
         event.preventDefault();
+
 
         if (form.inputTask.value !== "") {
             let taskData = {
@@ -39,13 +61,19 @@ class TodoApp {
                 task: form.inputTask.value
             };
 
-            this.tasks.push(taskData);
+            switch (submitDataset.formType) {
+                case 'add':
+                    this.saveTask(taskData);
+                    break;
+                case 'edit':
+                    taskData = {
+                        id: submitDataset.id,
+                        task: form.inputTask.value
+                    }
 
-            this.taskId++;
-
-            this.saveTasksList();
-
-            this.renderTableRow();
+                    this.saveTask(false, taskData);
+                    break;
+            }
 
             form.inputTask.value = "";
         }
@@ -77,6 +105,7 @@ class TodoApp {
                     </td>
                     <td>${task.task}</td>
                     <td>
+                        <button type="button" class="btn btn-primary edit-btn" data-bs-toggle="modal" data-bs-target="#taskFormModal" data-bs-id="${task.id}" data-bs-formType="edit">Edit</button>
                         <button type="button" class="btn btn-danger delete-btn" data-id="${task.id}">Delete</button>
                     </td>
                 </tr>
@@ -123,6 +152,32 @@ class TodoApp {
         this.saveTasksList();
 
         this.renderTableRow();
+    }
+
+    saveTask (isAdd = true,  taskData) {
+        if (isAdd) {
+            this.tasks.push(taskData);
+
+            this.taskId++;
+        } else {
+            console.log(taskData)
+            this.tasks.map(task => {
+                if(task.id == taskData.id) {
+                    task.task = taskData.task;
+                }
+            });
+        }
+
+        this.saveTasksList();
+
+        this.renderTableRow();
+
+    }
+
+    findTask (id) {
+        const foundTask = this.tasks.filter(task => task.id == id );
+
+        return [...foundTask]
     }
 
     saveTasksList () {
