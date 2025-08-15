@@ -30,8 +30,6 @@ class TodoApp {
 
         const getId = button.getAttribute('data-bs-id');
         const getFormType = button.getAttribute('data-bs-formType');
-        console.log(getId);
-        console.log(getFormType);
 
         this.modalFormSubmit.dataset.formType = getFormType;
 
@@ -160,7 +158,6 @@ class TodoApp {
 
             this.taskId++;
         } else {
-            console.log(taskData)
             this.tasks.map(task => {
                 if(task.id == taskData.id) {
                     task.task = taskData.task;
