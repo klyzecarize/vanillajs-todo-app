@@ -1,3 +1,6 @@
+# The App Link
+[To Do App](https://klyzecarize.github.io/vanillajs-todo-app/)
+
 # To Do App
 This app serves as a tutorial phase portfolio in reinforcing and improving my web development skills using HTML, CSS and JavaScript with the help of tutorials from sites and AI for consultation on what can be improved.
 

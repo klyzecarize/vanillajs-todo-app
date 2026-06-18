@@ -69,7 +69,7 @@ class TodoApp {
                         task: form.inputTask.value
                     }
 
-                    this.saveTask(false, taskData);
+                    this.saveTask(taskData, false);
                     break;
             }
 
@@ -152,7 +152,7 @@ class TodoApp {
         this.renderTableRow();
     }
 
-    saveTask (isAdd = true,  taskData) {
+    saveTask (taskData, isAdd = true) {
         if (isAdd) {
             this.tasks.push(taskData);
 
